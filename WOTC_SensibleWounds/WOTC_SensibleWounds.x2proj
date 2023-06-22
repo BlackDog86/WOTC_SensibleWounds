@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Guid>1ab83343-6fe1-425d-9fa7-1b300ce42147</Guid>
+    <Name>WOTC_SensibleWounds</Name>
+    <Description>Description of My XCOM 2 Mod.</Description>
+    <SteamPublishID>0</SteamPublishID>
+    <AssemblyName>WOTC_SensibleWounds</AssemblyName>
+    <RootNamespace>WOTC_SensibleWounds</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Config\" />
+    <Folder Include="Config\Base\" />
+    <Folder Include="Localization\" />
+    <Folder Include="Src\" />
+    <Folder Include="Src\WOTC_SensibleWounds\" />
+    <Folder Include="Src\WOTC_SensibleWounds\Classes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\Base\XComGameData.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\XComGame.fra">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\XComGame.int">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ReadMe.txt" />
+    <Content Include="ModPreview.jpg" />
+    <Content Include="ContentOptions.json" />
+    <Content Include="Config\Base\XComEditor.ini" />
+    <Content Include="Config\Base\XComEngine.ini" />
+    <Content Include="Config\Base\XComGame.ini" />
+    <Content Include="Config\XComTemplateCreator.ini" />
+    <Content Include="Config\XComTemplateEditor.ini" />
+    <Content Include="Src\extra_globals.uci" />
+    <Content Include="Src\WOTC_SensibleWounds\Classes\X2DLCInfo_WOTC_SensibleWounds.uc" />
+  </ItemGroup>
+  <PropertyGroup>
+    <SolutionRoot>$(MSBuildProjectDirectory)\..\</SolutionRoot>
+    <ScriptsDir>$(SolutionRoot).scripts\\</ScriptsDir>
+    <BuildCommonRoot>$(ScriptsDir)X2ModBuildCommon\</BuildCommonRoot>
+  </PropertyGroup>
+  <Import Project="$(BuildCommonRoot)XCOM2.targets" />
+</Project>

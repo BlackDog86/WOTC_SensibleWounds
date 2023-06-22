@@ -1,0 +1,8 @@
+[X2StrategyGameRulesetDataStructures]
+-WoundStatusStrings[0]="Lightly Wounded"
+-WoundStatusStrings[1]="Wounded"
+-WoundStatusStrings[2]="Gravely Wounded"
+
++WoundStatusStrings[0]="Light Wounds"
++WoundStatusStrings[1]="Moderate Wounds"
++WoundStatusStrings[2]="Serious Wounds"
