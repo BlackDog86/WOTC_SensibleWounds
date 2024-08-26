@@ -13,11 +13,24 @@
     <Folder Include="Config\Base\" />
     <Folder Include="Localization\" />
     <Folder Include="Src\" />
+    <Folder Include="Src\LW_Tuple" />
+    <Folder Include="Src\LW_Tuple\Classes" />
+    <Folder Include="Src\ModConfigMenuAPI" />
+    <Folder Include="Src\ModConfigMenuAPI\Classes" />
     <Folder Include="Src\WOTC_SensibleWounds\" />
     <Folder Include="Src\WOTC_SensibleWounds\Classes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\Base\XComGameData.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\Base\XComWOTC_SensibleWounds_DEFAULT.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\WOTC_SensibleWounds.fra">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Localization\WOTC_SensibleWounds.int">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Localization\XComGame.fra">
@@ -28,14 +41,72 @@
     </Content>
     <Content Include="ReadMe.txt" />
     <Content Include="ModPreview.jpg" />
-    <Content Include="ContentOptions.json" />
     <Content Include="Config\Base\XComEditor.ini" />
     <Content Include="Config\Base\XComEngine.ini" />
     <Content Include="Config\Base\XComGame.ini" />
-    <Content Include="Config\XComTemplateCreator.ini" />
-    <Content Include="Config\XComTemplateEditor.ini" />
-    <Content Include="Src\extra_globals.uci" />
-    <Content Include="Src\WOTC_SensibleWounds\Classes\X2DLCInfo_WOTC_SensibleWounds.uc" />
+    <Content Include="Src\extra_globals.uci">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\LW_Tuple\Classes\LWTuple.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Button.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Checkbox.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Dropdown.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Instance.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Label.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Setting.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_SettingsGroup.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_SettingsPage.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Slider.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_API_Spinner.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\Classes\MCM_OptionsScreen.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\MCM_API_CfgHelpers.uci">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\ModConfigMenuAPI\MCM_API_Includes.uci">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_SensibleWounds\Classes\WOTC_SensibleWounds_Defaults.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_SensibleWounds\Classes\WOTC_SensibleWounds_MCMScreen.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_SensibleWounds\Classes\WOTC_SensibleWounds_MCMScreenListener.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_SensibleWounds\Classes\X2EventListener_IgnoreHPHealingLogic.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\WOTC_SensibleWounds\Classes\X2EventListener_StatusOfRepair.uc">
+      <SubType>Content</SubType>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <SolutionRoot>$(MSBuildProjectDirectory)\..\</SolutionRoot>

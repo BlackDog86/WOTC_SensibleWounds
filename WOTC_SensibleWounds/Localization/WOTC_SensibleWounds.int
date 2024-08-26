@@ -1,0 +1,10 @@
+[X2EventListener_StatusOfRepair]
+m_strInRepair = "Being Repaired"
+
+[WOTC_SensibleWounds_MCMScreen]
+ModName = "Sensible Wound Times"
+PageTitle = "Sensible Wound Times"
+GroupHeader = "General"
+
+IGNORE_LOWEST_HP_Label = "Tactical healing reduces wounds"
+IGNORE_LOWEST_HP_Tip = "Enbable this option to use end-of-mission HP for wound calculation instead of unit's lowest HP"

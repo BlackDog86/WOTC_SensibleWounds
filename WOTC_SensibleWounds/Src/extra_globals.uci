@@ -1,4 +1,4 @@
-`define AMLOG(msg) `LOG(GetFuncName() @ `msg, /* class'WOTC_SensibleWounds_Defaults'.default.VERSION_CFG > class'WOTC_SensibleWounds_MCMScreen'.default.VERSION_CFG ? class'WOTC_SensibleWounds_Defaults'.default.DEBUG_LOGGING : class'WOTC_SensibleWounds_MCMScreen'.default.DEBUG_LOGGING */, 'WOTC_SensibleWounds')
+`define AMLOG(msg) `LOG(GetFuncName() @ `msg, /* class'MyXCOM2Mod_Defaults'.default.VERSION_CFG > class'MyXCOM2Mod_MCMScreen'.default.VERSION_CFG ? class'MyXCOM2Mod_Defaults'.default.DEBUG_LOGGING : class'MyXCOM2Mod_MCMScreen'.default.DEBUG_LOGGING */, 'MyXCOM2Mod')
 
 `define CAPS(VarName) class'UIUtilities_Text'.static.CapsCheckForGermanScharfesS(`VarName)
 

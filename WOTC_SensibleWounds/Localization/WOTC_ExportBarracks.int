@@ -1,0 +1,25 @@
+[WOTC_ExportBarracks_MCMScreen]
+ModName = "Export Barracks to Char. Pool"
+PageTitle = "Export Barracks to Character Pool"
+GroupHeader = "General"
+
+ONLY_ADD_NEW_CHARACTERS_Label = "Only add new characters to pool"
+ONLY_ADD_NEW_CHARACTERS_Tip = "Enable this option to only export barracks characters that do not already exist in the default character pool""
+
+REPLACE_CP_CHARACTERS_Label = "Replace CP soldiers with barracks soldiers"
+REPLACE_CP_CHARACTERS_Tip = "Enable this option to replace soldiers in the character pool with those from the barracks"
+
+exportButtonLabel = "Export barracks to character pool"
+exportButtonTooltip = "Use current settings and export now"
+exportButtonText = "Export Now"
+removeDupesButtonLabel = "Remove duplicate characters from pool"
+removeDupesButtonTooltip = "Remove Now"
+removeDupesButtonText = "Remove Now"
+
+[X2DownloadableContentInfo_WOTC_ExportBarracks]
+noHQdialogTitle = "No Barracks Detected!"
+noHQdialogText = "This command will not work from the main menu / shell screen. Please load a campaign first!"
+dupesremovedTitle = "All duplicate characters removed!" 
+dupesremovedText = "A timestamped backup of your previous character pool has been created in the documents|my games|XCOM 2 War of the Chosen|XComGame|CharacterPool folder"
+exportdialogTitle = "Export Complete!"
+exportdialogText = "A timestamped backup of your previous character pool has been created in the documents|my games|XCOM 2 War of the Chosen|XComGame|CharacterPool folder"
