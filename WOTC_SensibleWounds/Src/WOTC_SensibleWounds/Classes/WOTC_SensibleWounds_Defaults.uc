@@ -3,3 +3,5 @@ class WOTC_SensibleWounds_Defaults extends object config(WOTC_SensibleWounds_DEF
 var config int VERSION_CFG;
 
 var config bool IGNORE_LOWEST_HP;
+var config int RESTORE_HP_PERCENTAGE;
+var config bool APPLY_TO_SPARKS;

@@ -1,6 +1,7 @@
 class X2EventListener_IgnoreHPHealingLogic extends X2EventListener config (Game);
 
 var config bool IGNORE_LOWEST_HP;
+var config int RESTORE_HP_PERCENTAGE;
 
 `include(WOTC_SensibleWounds\Src\ModConfigMenuAPI\MCM_API_CfgHelpers.uci)
 
@@ -32,22 +33,36 @@ static function EventListenerReturn IgnoreLowestHPFn(Object EventData, Object Ev
 {
     local XComGameState_Unit		UnitState;
 	local XComGameState				NewGameState;
-	local bool						bIgnoreLowestHP;
+	local bool						bIgnoreLowestHP, bSparksIncluded;
+	local float						fRestorationFraction;
   
 	bIgnoreLowestHP = `GETMCMVAR(IGNORE_LOWEST_HP);
+	fRestorationFraction = `GETMCMVAR(RESTORE_HP_PERCENTAGE) / 100.0;
+	bSparksIncluded = `GETMCMVAR(APPLY_TO_SPARKS);
 
     if (bIgnoreLowestHP)
     {		
-			UnitState = XComGameState_Unit(EventData);
-			//we need to be not dead, on xcom team, a soldier, not removed from play already and not ignored from end mission health mod
-			if (!UnitState.IsDead() && UnitState.GetTeam() == eTeam_XCom && UnitState.IsSoldier() && !UnitState.GetMyTemplate().bIgnoreEndTacticalHealthMod)
-				{								
-				//Ignore the fact that the unit might've had lower HP earlier on, just use the current value
-				`Log("BeforeInd:" @ UnitState.GetFullName() @ "LowestHP:" @ UnitState.LowestHP @ "CurrentHP:" @ UnitState.GetCurrentStat(eStat_HP) @ "MaxHP:" @ UnitState.GetMaxStat(eStat_HP) @ "Armor:" @ UnitState.GetCurrentStat(eStat_ArmorMitigation),,'BDLOG');
-				UnitState.LowestHP = UnitState.GetCurrentStat(eStat_HP);				
-				`Log("AfterInd:" @ UnitState.GetFullName() @ "LowestHP:" @ UnitState.LowestHP @ "CurrentHP:" @ UnitState.GetCurrentStat(eStat_HP) @ "MaxHP:" @ UnitState.GetMaxStat(eStat_HP) @ "Armor:" @ UnitState.GetCurrentStat(eStat_ArmorMitigation),,'BDLOG');			
-				}		    
-		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);		
+		UnitState = XComGameState_Unit(EventData);
+		// we need to be not dead, on xcom team, not removed from play, a soldier without a custom mission healing function or a SPARK, if the option is ON
+		if (!UnitState.IsDead() && UnitState.GetTeam() == eTeam_XCom && ((UnitState.IsSoldier() && !UnitState.GetMyTemplate().bIgnoreEndTacticalHealthMod) || (UnitState.GetMyTemplateName() == 'SparkSoldier' && bSparksIncluded)))
+		{
+			if (NewGameState == none)
+			{
+				NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Tactical Wound Healing: Updating End of Mission HP");
+			}
+			UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+			//Ignore the fact that the unit might've had lower HP earlier on, just use the current value
+			`Log("SensibleWoundsUnitRemoved::HPBefore:" @ UnitState.GetFullName() @ "LowestHP:" @ UnitState.LowestHP @ "CurrentHP:" @ UnitState.GetCurrentStat(eStat_HP) @ "MaxHP:" @ UnitState.GetMaxStat(eStat_HP) @ "Armor:" @ UnitState.GetCurrentStat(eStat_ArmorMitigation),,'BDLOG');
+			UnitState.LowestHP = Round(UnitState.LowestHP + ((UnitState.GetCurrentStat(eStat_HP) - UnitState.LowestHP) * fRestorationFraction));				
+			// Guard against mod-added weirdness 
+			if(UnitState.LowestHP > UnitState.HighestHP)
+			{
+				UnitState.LowestHP = UnitState.HighestHP;
+			}
+			`Log("SensibleWoundsUnitRemoved::HPAfter:" @ UnitState.GetFullName() @ "LowestHP:" @ UnitState.LowestHP @ "CurrentHP:" @ UnitState.GetCurrentStat(eStat_HP) @ "MaxHP:" @ UnitState.GetMaxStat(eStat_HP) @ "Armor:" @ UnitState.GetCurrentStat(eStat_ArmorMitigation),,'BDLOG');			
+			 if (NewGameState != none)
+				`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);		
+		}
 	}
 	return ELR_NoInterrupt;
 }
@@ -57,25 +72,40 @@ static function EventListenerReturn MissionEndIgnoreLowestHPFn(Object EventData,
     local XComGameState_Unit		UnitState;
 	local XComGameState				NewGameState;
 	local XComGameStateHistory		History;
-	local bool						bIgnoreLowestHP;
+	local bool						bIgnoreLowestHP, bSparksIncluded;
+	local float						fRestorationFraction;
 
 	History = `XCOMHISTORY;
 	bIgnoreLowestHP = `GETMCMVAR(IGNORE_LOWEST_HP);
+	fRestorationFraction = `GETMCMVAR(RESTORE_HP_PERCENTAGE) / 100.0;
+	bSparksIncluded = `GETMCMVAR(APPLY_TO_SPARKS);
 
     if (bIgnoreLowestHP)
     {		
 		foreach History.IterateByClassType(class'XComGameState_Unit',UnitState)
 		{
-			//we need to be not dead, on xcom team, a soldier, not removed from play already and not ignored from end mission health mod
-			if (!UnitState.IsDead() && UnitState.GetTeam() == eTeam_XCom && UnitState.IsSoldier() && !UnitState.bRemovedFromPlay && !UnitState.GetMyTemplate().bIgnoreEndTacticalHealthMod)
-				{								
+			// we need to be not dead, on xcom team, not removed from play, a soldier without a custom mission healing function or a SPARK, if the option is ON			
+			if (!UnitState.IsDead() && UnitState.GetTeam() == eTeam_XCom && !UnitState.bRemovedFromPlay && ((UnitState.IsSoldier() && !UnitState.GetMyTemplate().bIgnoreEndTacticalHealthMod) || (UnitState.GetMyTemplateName() == 'SparkSoldier' && bSparksIncluded)))
+			{		
+				if(NewGameState == none)
+				{
+					NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Tactical Wound Healing: Updating End of Mission HP");
+				}
+				UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
 				//Ignore the fact that the unit might've had lower HP earlier on, just use the current value
-				`Log("BeforeSquad:" @ UnitState.GetFullName() @ "LowestHP:" @ UnitState.LowestHP @ "CurrentHP:" @ UnitState.GetCurrentStat(eStat_HP) @ "MaxHP:" @ UnitState.GetMaxStat(eStat_HP) @ "Armor:" @ UnitState.GetCurrentStat(eStat_ArmorMitigation),,'BDLOG');
-				UnitState.LowestHP = UnitState.GetCurrentStat(eStat_HP);				
-				`Log("AfterSquad:" @ UnitState.GetFullName() @ "LowestHP:" @ UnitState.LowestHP @ "CurrentHP:" @ UnitState.GetCurrentStat(eStat_HP) @ "MaxHP:" @ UnitState.GetMaxStat(eStat_HP) @ "Armor:" @ UnitState.GetCurrentStat(eStat_ArmorMitigation),,'BDLOG');			
-				}	
-		}	    
-		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);		
+				`Log("SensibleWoundsMissionEnd::HPBefore:" @ UnitState.GetFullName() @ "LowestHP:" @ UnitState.LowestHP @ "CurrentHP:" @ UnitState.GetCurrentStat(eStat_HP) @ "MaxHP:" @ UnitState.GetMaxStat(eStat_HP) @ "Armor:" @ UnitState.GetCurrentStat(eStat_ArmorMitigation),,'BDLOG');
+				UnitState.LowestHP = Round(UnitState.LowestHP + ((UnitState.GetCurrentStat(eStat_HP) - UnitState.LowestHP) * fRestorationFraction));
+				
+				// Guard against mod-added weirdness 
+				if(UnitState.LowestHP > UnitState.HighestHP)
+				{
+					UnitState.LowestHP = UnitState.HighestHP;
+				}
+				`Log("SensibleWoundsMissionEnd::HPAfterAdjustment:" @ UnitState.GetFullName() @ "LowestHP:" @ UnitState.LowestHP @ "CurrentHP:" @ UnitState.GetCurrentStat(eStat_HP) @ "MaxHP:" @ UnitState.GetMaxStat(eStat_HP) @ "Armor:" @ UnitState.GetCurrentStat(eStat_ArmorMitigation),,'BDLOG');
+			}
+		}
+		if (NewGameState != none)
+			`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	}
 	return ELR_NoInterrupt;
 }
